@@ -1,11 +1,13 @@
-export class Password {
+export default class Password {
   public hasTwoAdjacentNumbers(password: number): boolean {
     let stringPassword: string = password.toString();
     let stringDigits: string[] = stringPassword.split('');
     for (let digit = 0; digit < stringDigits.length - 1; digit++) {
-      if (stringDigits[digit] == stringDigits[digit + 1]) {
+      if (
+        stringDigits[digit] == stringDigits[digit + 1] &&
+        this.digitIsNotPartOfABiggerGroup(stringPassword, stringDigits[digit])
+      )
         return true;
-      }
     }
     return false;
   }
@@ -33,5 +35,20 @@ export class Password {
       }
     }
     return possiblePasswords;
+  }
+
+  private digitIsNotPartOfABiggerGroup(
+    stringPassword: string,
+    digit: string,
+  ): boolean {
+    let regex = new RegExp(
+      '([^' + digit + ']|^)' + digit + digit + '([^' + digit + ']|$)',
+      'g',
+    ); // ([^4]|^)44([^4]|$)
+    let regexOcurrences = stringPassword.match(regex);
+    if (regexOcurrences != null && regexOcurrences.length == 1) {
+      return true;
+    }
+    return false;
   }
 }

@@ -1,4 +1,4 @@
-import { Password } from '../src/secure-container';
+import Password from '../src/secure-container';
 
 describe('Password', () => {
   const password = new Password();
