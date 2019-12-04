@@ -3,7 +3,10 @@ export class Rocket {
     let fuel: number;
     fuel = Math.floor(mass / 3);
     fuel -= 2;
-    return fuel;
+    if (fuel <= 0) {
+      return 0;
+    }
+    return fuel + this.getFuelForModuleWithMass(fuel);
   }
 
   public addFuelFromModulesWithMass(massArray: number[]): number {

@@ -5,13 +5,15 @@ describe('Rocket', () => {
     const rocket = new Rocket();
     expect(rocket.getFuelForModuleWithMass(12)).toBe(2);
     expect(rocket.getFuelForModuleWithMass(14)).toBe(2);
-    expect(rocket.getFuelForModuleWithMass(1969)).toBe(654);
-    expect(rocket.getFuelForModuleWithMass(100756)).toBe(33583);
+    expect(rocket.getFuelForModuleWithMass(1969)).toBe(966);
+    expect(rocket.getFuelForModuleWithMass(100756)).toBe(50346);
   });
 
   it('adds the fuel requirements for all the modules with their mass passed as argument', () => {
     const rocket = new Rocket();
-    expect(rocket.addFuelFromModulesWithMass([12, 14, 1969])).toBe(658);
+    expect(rocket.addFuelFromModulesWithMass([14, 1969, 100756])).toBe(
+      2 + 966 + 50346,
+    );
   });
 
   it('answers the question', () => {
