@@ -6,6 +6,9 @@ describe('Password', () => {
   it('has 2 adjacent numbers', () => {
     expect(password.hasTwoAdjacentNumbers(123456)).toBeFalsy();
     expect(password.hasTwoAdjacentNumbers(123455)).toBeTruthy();
+    expect(password.hasTwoAdjacentNumbers(112233)).toBeTruthy();
+    expect(password.hasTwoAdjacentNumbers(123444)).toBeFalsy();
+    expect(password.hasTwoAdjacentNumbers(111122)).toBeTruthy();
   });
 
   it('has digits that never decrease, going from left to right', () => {
