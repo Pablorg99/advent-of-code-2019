@@ -2,12 +2,10 @@ export default class Password {
   public hasTwoAdjacentNumbers(password: number): boolean {
     let stringPassword: string = password.toString();
     let stringDigits: string[] = stringPassword.split('');
-    for (let digit = 0; digit < stringDigits.length - 1; digit++) {
-      if (
-        stringDigits[digit] == stringDigits[digit + 1] &&
-        this.digitIsNotPartOfABiggerGroup(stringPassword, stringDigits[digit])
-      )
+    for (let digit = 0; digit < stringDigits.length; digit++) {
+      if (this.digitIsRepeateadOnlyTwice(stringPassword, stringDigits[digit])) {
         return true;
+      }
     }
     return false;
   }
@@ -37,7 +35,7 @@ export default class Password {
     return possiblePasswords;
   }
 
-  private digitIsNotPartOfABiggerGroup(
+  private digitIsRepeateadOnlyTwice(
     stringPassword: string,
     digit: string,
   ): boolean {
