@@ -1,3 +1,5 @@
+import { createWriteStream } from 'fs';
+
 export class Coordinates {
   x: number;
   y: number;
@@ -13,18 +15,54 @@ export class Wire extends Coordinates {}
 export class CrossedWire extends Coordinates {}
 
 export class Grid {
-  path: any[] = [];
+  path: Coordinates[] = [];
   startingPoint: Coordinates;
-  currentPoint: any;
+  currentPoint: Coordinates;
+  crossedWires: CrossedWire[] = [];
 
   constructor(startingPoint?: Coordinates) {
     this.startingPoint = startingPoint;
     this.currentPoint = startingPoint;
   }
 
+  public getDistanceToCloserCross(): number {
+    this.getCrossedWires();
+    return this.distanceToClosestCross();
+  }
+
+  private getCrossedWires(): void {
+    for (let index = 0; index < this.path.length; index++) {
+      if (this.path[index] instanceof CrossedWire) {
+        this.crossedWires.push(this.path[index]);
+      }
+    }
+  }
+
+  private distanceToClosestCross(): number {
+    let lowerDistance: number = Number.MAX_SAFE_INTEGER;
+    for (let index = 0; index < this.crossedWires.length; index++) {
+      if (
+        this.manhattanDistanceFromStartingPoint(this.crossedWires[index]) <
+        lowerDistance
+      ) {
+        lowerDistance = this.manhattanDistanceFromStartingPoint(
+          createWriteStream[index],
+        );
+      }
+    }
+    return lowerDistance;
+  }
+
+  private manhattanDistanceFromStartingPoint(crossedWire: CrossedWire): number {
+    return (
+      Math.abs(this.startingPoint.x - crossedWire.x) +
+      Math.abs(this.startingPoint.y - crossedWire.y)
+    );
+  }
+
   public wirePath(stringOfInstructions: string): void {
     let arrayOfInstructions: string[] = stringOfInstructions.split(',');
-    arrayOfInstructions.forEach(this.wireInstruction, this);
+    arrayOfInstructions.forEach(this.wireInstruction this);
   }
 
   private wireInstruction(stringInstruction: string): void {
@@ -47,33 +85,69 @@ export class Grid {
         break;
 
       default:
-        break;
+        throw new Error('Unrecognised instruction');
     }
-    this.updateCurrentPoint();
   }
 
   private wireUp(positionsToMove: number): void {
-    for (let y = this.currentPoint.y + 1; y <= positionsToMove; y++) {
-      this.path.push(new Wire(this.currentPoint.x, y));
+    let movements: number = 0;
+    while (movements < positionsToMove) {
+      this.wirePosition(this.currentPoint.x, this.currentPoint.y + 1);
+      this.updateCurrentPoint();
+      movements++;
     }
   }
 
   private wireRight(positionsToMove: number): void {
-    for (let x = this.currentPoint.x + 1; x <= positionsToMove; x++) {
-      this.path.push(new Wire(x, this.currentPoint.y));
+    let movements: number = 0;
+    while (movements < positionsToMove) {
+      this.wirePosition(this.currentPoint.x + 1, this.currentPoint.y);
+      this.updateCurrentPoint();
+      movements++;
     }
   }
 
   private wireLeft(positionsToMove: number): void {
-    for (let x = this.currentPoint.x - 1; Math.abs(x) <= positionsToMove; x--) {
-      this.path.push(new Wire(x, this.currentPoint.y));
+    let movements: number = 0;
+    while (movements < positionsToMove) {
+      this.wirePosition(this.currentPoint.x - 1, this.currentPoint.y);
+      this.updateCurrentPoint();
+      movements++;
     }
   }
 
   private wireDown(positionsToMove: number): void {
-    for (let y = this.currentPoint.y - 1; Math.abs(y) <= positionsToMove; y--) {
-      this.path.push(new Wire(this.currentPoint.x, y));
+    let movements: number = 0;
+    while (movements < positionsToMove) {
+      this.wirePosition(this.currentPoint.x, this.currentPoint.y - 1);
+      this.updateCurrentPoint();
+      movements++;
     }
+  }
+
+  private wirePosition(x: number, y: any): void {
+    let wire = new Wire(x, y);
+    if (this.pathContains(wire)) {
+      this.path.push(new CrossedWire(x, y));
+    } else {
+      this.path.push(wire);
+    }
+  }
+
+  private pathContains(wire: Wire): boolean {
+    for (let index = 0; index < this.path.length; index++) {
+      if (this.areEqual(wire, this.path[index])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private areEqual(newWire: Wire, arrayWire: Wire): boolean {
+    if (newWire.x == arrayWire.x && newWire.y == arrayWire.y) {
+      return true;
+    }
+    return false;
   }
 
   private updateCurrentPoint(): void {
