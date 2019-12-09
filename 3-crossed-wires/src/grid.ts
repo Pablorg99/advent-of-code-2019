@@ -1,5 +1,5 @@
+import { Coordinates, CrossedWire } from './coordinates';
 import { Path } from './path';
-import { CrossedWire, Coordinates } from './coordinates';
 
 export class Grid {
   public firstPath: Path = new Path();
@@ -9,7 +9,7 @@ export class Grid {
 
   public wirePaths(
     firstPathInstructions: string,
-    secondPathInstructions,
+    secondPathInstructions: string,
   ): void {
     this.wireFirstPath(firstPathInstructions);
     this.wireSecondPath(secondPathInstructions);

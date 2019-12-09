@@ -6,22 +6,22 @@ export class Path {
 
   public wireInstruction(stringInstruction: string): void {
     let instructionType: string = stringInstruction.substring(0, 1);
-    let movements: number = parseInt(stringInstruction.substring(1));
+    let positionsToMove: number = parseInt(stringInstruction.substring(1));
     switch (instructionType) {
       case 'U':
-        this.wireUp(movements);
+        this.wireUp(positionsToMove);
         break;
 
       case 'R':
-        this.wireRight(movements);
+        this.wireRight(positionsToMove);
         break;
 
       case 'L':
-        this.wireLeft(movements);
+        this.wireLeft(positionsToMove);
         break;
 
       case 'D':
-        this.wireDown(movements);
+        this.wireDown(positionsToMove);
         break;
 
       default:
